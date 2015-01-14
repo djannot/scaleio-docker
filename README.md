@@ -38,17 +38,17 @@ To create a new cluster, you just need to run the following commands:
 
 - On 192.168.1.1:
 ```
-docker run -d -p 9011:9011 -p 7072:7072 --privileged 10.64.231.45:5000/scaleio-tb-1.31
+docker run -d -p 9011:9011 -p 7072:7072 --privileged <scaleio-tb-1.31 image you built>
 ```
 
 -	On 192.168.1.2:
 ```
-docker run -d -p 6611:6611 -p 9011:9011 -p 7072:7072 --privileged 10.64.231.45:5000/scaleio-secondary-mdm-1.31
+docker run -d -p 6611:6611 -p 9011:9011 -p 7072:7072 --privileged <scaleio-secondary-mdm-1.31 image you built>
 ```
 
 - On 192.168.1.3:
 ```
-docker run -d –p 80:80 -p 443:443 -p 6611:6611 -p 9011:9011 -p 7072:7072 --privileged -e IP_DOCKER_HOST=192.168.1.3 -e IP_SECONDARY_MDM=192.168.1.2 -e IP_TB=192.168.1.1 -e DEVICE_LIST=/dev/sdb,/dev/sdc 10.64.231.45:5000/scaleio-primary-mdm-1.31
+docker run -d –p 80:80 -p 443:443 -p 6611:6611 -p 9011:9011 -p 7072:7072 --privileged -e IP_DOCKER_HOST=192.168.1.3 -e IP_SECONDARY_MDM=192.168.1.2 -e IP_TB=192.168.1.1 -e DEVICE_LIST=/dev/sdb,/dev/sdc <scaleio-primary-mdm-1.31 image you built>
 ```
 
 The docker run command return the id of the docker container. You can then use the docker logs <id> and check that all the commands are correctly executed. Then, the output of the ps and netstat commands are displayed to let you make sure everything is running correctly.
