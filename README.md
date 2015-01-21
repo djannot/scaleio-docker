@@ -29,8 +29,8 @@ docker build .
 So, assume you want to create the following setup:
 
 -	ScaleIO TB and SDS - 192.168.1.1 - Using /dev/sdb and /dev/sdc
--	ScaleIO Secondary MDM and SDS - 192.168.1.1 - Using /dev/sdb and /dev/sdc
--	ScaleIO Secondary MDM and SDS and API gateway - 192.168.1.1 - Using /dev/sdb and /dev/sdc
+-	ScaleIO Secondary MDM and SDS - 192.168.1.2 - Using /dev/sdb and /dev/sdc
+-	ScaleIO Primary MDM and SDS and API gateway - 192.168.1.3 - Using /dev/sdb and /dev/sdc
 
 Existing data on /dev/sdb and /dev/sdc will be lost.
 
