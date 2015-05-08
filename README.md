@@ -32,7 +32,7 @@ So, assume you want to create the following setup:
 -	ScaleIO Secondary MDM and SDS - 192.168.1.2 - Using /dev/sdb and /dev/sdc
 -	ScaleIO Primary MDM and SDS and API gateway - 192.168.1.3 - Using /dev/sdb and /dev/sdc
 
-Existing data on /dev/sdb and /dev/sdc will be lost.
+Existing data on /dev/sdb and /dev/sdc will be lost. ScaleIO requires that you use a minimum of three SDS servers, with a combined free capacity of at least 200 GB.
 
 To create a new cluster, you just need to run the following commands:
 
