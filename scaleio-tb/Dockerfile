@@ -7,6 +7,7 @@ RUN yum -y install bash-completion
 ADD . /opt/emc/scaleio/siinstall/
 
 RUN printf "#!/bin/sh \n\
+set -x \n\
 rpm -qa | egrep -i 'ecs|scaleio' \n\
 if ((\$? != 0 )); then \n\
   rpm -Uvh /opt/emc/scaleio/siinstall/EMC-ScaleIO-tb-*.x86_64.rpm \n\
