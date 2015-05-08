@@ -7,6 +7,7 @@ RUN yum -y install bash-completion
 ADD . /opt/emc/scaleio/siinstall/
 
 RUN printf "#!/bin/sh \n\
+set -x \n\
 umount /dev/shm \n\
 mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=524288k shm /dev/shm \n\
 rpm -qa | egrep -i 'ecs|scaleio' \n\
