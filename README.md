@@ -24,6 +24,8 @@ Then, you can simply run the following command in each directory:
 docker build .
 ```
 
+Please note that the build assumes that you have 2 additional hard drives (/dev/sdb and /dev/sdc) on each of the hosts that will be running the Docker containers.
+
 # Run
 
 So, assume you want to create the following setup:
@@ -64,6 +66,50 @@ If you want to execute commands on the ScaleIO containers, you can use the nsent
 It assumes that you will access the SDS from other hosts where you install the ScaleIO SDC binary.
 
 You don’t have to worry about having clean /dev/sdb and /dev/sdc devices because the SDS are added with the force_clean option.
+
+# Running all 3 containers on the same host
+
+It is also possible to run all 3 Docker containers on a single host. It requires some modifications to the Dockerfile for each container and to the way the containers are being run.
+
+## Dockerfile changes
+If all 3 containers are running on the same host, the Dockerfiles for each container needs to be changed because the current Dockerfile assumes ownership of /dev/sdb and /dev/sdc, which will cause problems with all 3 containers running on the same host.
+To enable this, we will need to create 2 empty files on each container, called /root/sdb and /root/sdc. Those files will be used as the "drives" for the ScaleIO SDS.
+
+In each of the Dockerfile, below this line 
+```
+RUN printf "#!/bin/sh \n\
+```
+
+add the following 2 lines
+```
+/usr/bin/truncate --size 100G /root/sdb \n\
+/usr/bin/truncate --size 100G /root/sdc \n\
+```
+
+The 2 truncate commands will create 2 100GB empty files that are "thin provisioned".
+
+## Running all 3 containers on a single host
+In order to run all 3 containers on a single host, the command used to start the container has to change as well.
+Those commands will assume that you have added the following IP addresses to your primary network interface:
+192.168.1.10, 192.168.1.11, 192.168.1.12. Those aliases might need to be changed depending on your network IP address scheme.
+Based on this IP address scheme, 192.168.1.10 will be assigned to the TB, 192.168.1.11 will be assigned to the Secondary MDM and 192.168.1.12 will be assigned to the Primary MDM.
+### Running scaleio-tb
+The command to start the TB is:
+```
+docker run -d --name scaleio-tb -p 192.168.1.10:9011:9011 -p 192.168.1.10:7072:7072 --privileged scaleio-tb
+```
+
+### Running secondary-mdm
+The command to start the Secondary MDM is:
+```
+docker run -d --name secondary-mdm -p 192.168.1.11:9011:9011 -p 192.168.1.11:7072:7072 -p 192.168.1.11:6611:6611 --privileged scaleio-secondary-mdm
+```
+
+### Running primary-mdm
+The command to start the Primary MDM is:
+```
+docker run -d --name primary-mdm -p 192.168.1.12:80:80 -p 192.168.1.12:443:443 -p 192.168.1.12:9011:9011 -p 192.168.1.12:7072:7072 -p 192.168.1.12:6611:6611 -e IP_DOCKER_HOST=192.168.1.12 -e IP_SECONDARY_MDM=192.168.1.11 -e IP_TB=192.168.1.10 -e DEVICE_LIST=/root/sdb,/root/sdc --privileged scaleio-primary-mdm
+```
 
 # Licensing
 

@@ -33,16 +33,17 @@ if ((\$test != 0 )); then \n\
   scli --switch_to_cluster_mode --mdm_ip \$IP_DOCKER_HOST \n\
   #scli --mdm --set_license --license= \n\
   scli --add_protection_domain --mdm_ip \$IP_DOCKER_HOST --protection_domain_name domain1 \n\
+  scli --add_storage_domain --mdm_ip $IP_DOCKER_HOST --protection_domain_name domain1 --storage_pool_name pool1 \n\
   sleep 10 \n\
-  until scli --sds --add_sds --mdm_ip \$IP_DOCKER_HOST --sds_ip \$IP_TB --sds_ip_role all --protection_domain_name domain1 --device_path \$DEVICE_LIST --sds_name sds1 --no_test --force_clean --i_am_sure; do \n\
+  until scli --sds --add_sds --mdm_ip \$IP_DOCKER_HOST --sds_ip \$IP_TB --sds_ip_role all --protection_domain_name domain1 --storage_pool_name pool1 --device_path \$DEVICE_LIST --sds_name sds1 --no_test --force_clean --i_am_sure; do \n\
     echo Retrying in 5 seconds \n\
     sleep 5 \n\
   done \n\
-  until scli --sds --add_sds --mdm_ip \$IP_DOCKER_HOST --sds_ip \$IP_DOCKER_HOST --sds_ip_role all --protection_domain_name domain1 --device_path \$DEVICE_LIST --sds_name sds2 --no_test --force_clean --i_am_sure; do \n\
+  until scli --sds --add_sds --mdm_ip \$IP_DOCKER_HOST --sds_ip \$IP_DOCKER_HOST --sds_ip_role all --protection_domain_name domain1 --storage_pool_name pool1 --device_path \$DEVICE_LIST --sds_name sds2 --no_test --force_clean --i_am_sure; do \n\
     echo Retrying in 5 seconds \n\
     sleep 5 \n\
   done \n\
-  until scli --sds --add_sds --mdm_ip \$IP_DOCKER_HOST --sds_ip \$IP_SECONDARY_MDM --sds_ip_role all --protection_domain_name domain1 --device_path \$DEVICE_LIST --sds_name sds3 --no_test --force_clean --i_am_sure; do \n\
+  until scli --sds --add_sds --mdm_ip \$IP_DOCKER_HOST --sds_ip \$IP_SECONDARY_MDM --sds_ip_role all --protection_domain_name domain1 --storage_pool_name pool1 --device_path \$DEVICE_LIST --sds_name sds3 --no_test --force_clean --i_am_sure; do \n\
     echo Retrying in 5 seconds \n\
     sleep 5 \n\
   done \n\
